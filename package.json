@@ -1,0 +1,18 @@
+{
+  "name": "adaichat",
+  "version": "0.1.0",
+  "description": "Cette application est destinée à converser entre camarades",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(https://github.com/LorraineLscr/ADAICHAT_NODEJS.git)"
+  },
+  "keywords": [
+    "social"
+  ],
+  "author": "LorraineLscr",
+  "license": "MIT"
+}
