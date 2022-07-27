@@ -14,5 +14,9 @@
     "social"
   ],
   "author": "LorraineLscr",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1"
+  }
 }
