@@ -5,6 +5,8 @@ let mesMessages = [];
 let monId;
 const clients = document.getElementById("clients");
 const conversation = document.getElementById("conversation");
+const private = document.getElementById("private"); // modale
+const sendPrivate = document.getElementById("sendPrivate"); // bouton envoi private
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const pseudo = urlParams.get('pseudo');
@@ -13,18 +15,48 @@ const pseudo = urlParams.get('pseudo');
 function displayClients(monSocketClients) {
     let clientsTmp = "";
     monSocketClients.forEach(element => {
-        clientsTmp += element.pseudo + "<br>";
+        clientsTmp += `<div onclick="privateMessage('${element.id}');">${element.pseudo}</div>`;
     });
     clients.innerHTML = clientsTmp;
+}
+
+function privateMessage(idContact) {
+    // j'ouvre une modale qui contient un textarea tinymce et un bouton "Envoi privé"
+    private.classList.toggle('hide');
+    private.classList.toggle('show');
+    console.log(idContact)
+    tinymce.init({
+        selector: '#myprivate',
+        plugins: [
+            'advlist', 'autolink',
+            'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+            'fullscreen', 'insertdatetime', 'media', 'table', 'help', 'wordcount', 'emoticons'
+        ],
+        toolbar: 'undo redo | formatpainter casechange blocks | bold italic backcolor emoticons | ' +
+            'alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+    });
+    sendPrivate.addEventListener("click", () => {
+        let monMessage = tinyMCE.get('myprivate').getContent();
+        let date = new Date();
+        // idContact, monId, pseudo
+        socket.emit("newPrivateMessage", {
+            message:monMessage,
+            date:date,
+            idContact:idContact,
+            id:monId, 
+            pseudo:pseudo
+        }) 
+    })
 }
 
 function displayMessage(mesMessages) {
     console.log(mesMessages);
     let messagesTmp = "";
     mesMessages.forEach(element => {
-        messagesTmp += element.pseudo + "<br>" + 
-        element.message + "<br>" + 
-        element.date + "<br>";
+        messagesTmp += element.pseudo + "<br>" +
+            element.message + "<br>" +
+            element.date + "<br>";
     });
     conversation.innerHTML = messagesTmp;
 }
@@ -91,6 +123,10 @@ socket.on('newMessageResponse', (newMessageResponse) => {
     mesMessages = newMessageResponse.messages;
     // displayMessage
     displayMessage(mesMessages);
+})
+
+socket.on('newPrivateMessageResponse',(newPrivateMessageResponse)=>{
+    console.dir(newPrivateMessageResponse);
 })
 
 socket.on('clientDisconnect', (clientDisconnect) => {

@@ -39,6 +39,15 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('newMessageResponse',{messages:messages})
     })
 
+    socket.on("newPrivateMessage", (newPrivateMessage)=>{
+        // je dois faire un emit sur un unique id (newPrivateMessage.idContact)
+        console.dir(newPrivateMessage)
+        // stockage des messages éventuels
+        socket.broadcast.to(newPrivateMessage.idContact).emit("newPrivateMessageResponse",{
+            newPrivateMessageResponse:newPrivateMessage
+        })
+    })
+
     if (socketClients.length > 0) {
         socket.on('disconnect', () => {
             // socket.id = client déconnecté
