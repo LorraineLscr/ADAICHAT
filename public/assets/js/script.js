@@ -7,6 +7,7 @@ const clients = document.getElementById("clients");
 const conversation = document.getElementById("conversation");
 const private = document.getElementById("private"); // modale
 const sendPrivate = document.getElementById("sendPrivate"); // bouton envoi private
+const responsePrivate = document.getElementById("responsePrivate");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const pseudo = urlParams.get('pseudo');
@@ -127,6 +128,14 @@ socket.on('newMessageResponse', (newMessageResponse) => {
 
 socket.on('newPrivateMessageResponse',(newPrivateMessageResponse)=>{
     console.dir(newPrivateMessageResponse);
+    responsePrivate.classList.toggle('hide');
+    responsePrivate.classList.toggle('show');
+    responsePrivate.innerHTML = newPrivateMessageResponse.pseudo+"<br>"+
+    newPrivateMessageResponse.message+"<br>"+newPrivateMessageResponse.date;
+    setTimeout(()=>{
+        responsePrivate.classList.toggle('hide');
+        responsePrivate.classList.toggle('show'); 
+    },5000);
 })
 
 socket.on('clientDisconnect', (clientDisconnect) => {
