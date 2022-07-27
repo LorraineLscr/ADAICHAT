@@ -2,9 +2,13 @@
 const socket = io();
 let monSocketClients = [];
 let mesMessages = [];
-let monId, pseudo;
+let monId;
 const clients = document.getElementById("clients");
 const conversation = document.getElementById("conversation");
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const pseudo = urlParams.get('pseudo');
+
 // déclarations de fonctions
 function displayClients(monSocketClients) {
     let clientsTmp = "";
@@ -58,7 +62,6 @@ socket.on("init", (init) => {
     monId = init.id;
     monSocketClients = init.socketClients;
     mesMessages = init.messages;
-    pseudo = prompt("Veuillez vous identifier");
     // j'ajoute mon pseudo au tableau des clients
     for (
         let i = 0;
