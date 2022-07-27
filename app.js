@@ -21,7 +21,8 @@ io.on('connection', (socket) => {
     socket.emit("init", {
         message: "Bienvenue nouveau client",
         id: socket.id,
-        socketClients: socketClients
+        socketClients: socketClients,
+        messages:messages
     })
 
     socket.on('initResponse', (initResponse) => {

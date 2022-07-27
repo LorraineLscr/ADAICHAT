@@ -18,7 +18,9 @@ function displayMessage(mesMessages) {
     console.log(mesMessages);
     let messagesTmp = "";
     mesMessages.forEach(element => {
-        messagesTmp += element.pseudo + element.message + element.date + "<br>";
+        messagesTmp += element.pseudo + "<br>" + 
+        element.message + "<br>" + 
+        element.date + "<br>";
     });
     conversation.innerHTML = messagesTmp;
 }
@@ -47,6 +49,7 @@ document.getElementById("sendMessage").addEventListener("click", () => {
     })
     console.dir(mesMessages);
     socket.emit("newMessage", { messages: mesMessages })
+    displayMessage(mesMessages);
 })
 
 socket.on("init", (init) => {
@@ -54,6 +57,7 @@ socket.on("init", (init) => {
     // console.log(init.id);
     monId = init.id;
     monSocketClients = init.socketClients;
+    mesMessages = init.messages;
     pseudo = prompt("Veuillez vous identifier");
     // j'ajoute mon pseudo au tableau des clients
     for (
@@ -71,6 +75,7 @@ socket.on("init", (init) => {
     })
     // displayClients
     displayClients(monSocketClients);
+    displayMessage(mesMessages);
 })
 socket.on('newClient', (newClient) => {
     monSocketClients = newClient.socketClients;
