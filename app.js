@@ -7,6 +7,7 @@ const io = require('socket.io')(server);
 const hostname = '127.0.0.1';
 const port = 8080;
 let socketClients = [];
+let messages = [];
 
 app.use(express.static('public'));
 app.get('/', function (req, res) {
@@ -28,6 +29,13 @@ io.on('connection', (socket) => {
         console.dir(socketClients);
         // partager aux clients déjà connectés
         socket.broadcast.emit('newClient',{socketClients:socketClients})
+    })
+
+    socket.on('newMessage',(newMessage)=>{
+        messages = newMessage.messages;
+        console.dir(messages)
+        // je partage en broadcast le tableau message
+        socket.broadcast.emit('newMessageResponse',{messages:messages})
     })
 
     if (socketClients.length > 0) {
