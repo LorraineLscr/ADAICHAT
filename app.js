@@ -40,6 +40,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on("newPrivateMessage", (newPrivateMessage)=>{
+        // je reçois idContact, id, message, pseudo, date
         // je dois faire un emit sur un unique id (newPrivateMessage.idContact)
         console.dir(newPrivateMessage)
         // stockage des messages éventuels

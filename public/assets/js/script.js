@@ -42,12 +42,15 @@ function privateMessage(idContact) {
         let date = new Date();
         // idContact, monId, pseudo
         socket.emit("newPrivateMessage", {
-            message:monMessage,
-            date:date,
-            idContact:idContact,
-            id:monId, 
-            pseudo:pseudo
-        }) 
+            message: monMessage,
+            date: date,
+            idContact: idContact,
+            id: monId,
+            pseudo: pseudo
+        })
+        private.classList.toggle('d-none');
+        // vider le textarea
+        tinyMCE.get('myprivate').setContent('');
     })
 }
 
@@ -84,9 +87,10 @@ document.getElementById("sendMessage").addEventListener("click", () => {
         message: monMessage,
         date: date
     })
-    console.dir(mesMessages);
+    // console.dir(mesMessages);
     socket.emit("newMessage", { messages: mesMessages })
     displayMessage(mesMessages);
+    tinyMCE.get('myprivate').setContent('');
 })
 
 socket.on("init", (init) => {
@@ -126,16 +130,17 @@ socket.on('newMessageResponse', (newMessageResponse) => {
     displayMessage(mesMessages);
 })
 
-socket.on('newPrivateMessageResponse',(newPrivateMessageResponse)=>{
-    console.dir(newPrivateMessageResponse);
-    responsePrivate.classList.toggle('hide');
-    responsePrivate.classList.toggle('show');
-    responsePrivate.innerHTML = newPrivateMessageResponse.pseudo+"<br>"+
-    newPrivateMessageResponse.message+"<br>"+newPrivateMessageResponse.date;
-    setTimeout(()=>{
-        responsePrivate.classList.toggle('hide');
-        responsePrivate.classList.toggle('show'); 
-    },5000);
+socket.on('newPrivateMessageResponse', (newPrivateMessageResponse) => {
+    // boucle for of
+    for (const [key, value] of Object.entries(newPrivateMessageResponse)) {
+        let pseudo = value.pseudo;
+        let message = value.message;
+        let date = value.date;
+        let responseCard = document.createElement('div');
+        responseCard.innerHTML = pseudo + "<br>" + message + "<br>" + date;
+        responsePrivate.append(responseCard);
+    }
+    responsePrivate.classList.toggle('d-none');
 })
 
 socket.on('clientDisconnect', (clientDisconnect) => {

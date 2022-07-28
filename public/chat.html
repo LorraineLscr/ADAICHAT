@@ -20,17 +20,30 @@
 
 <body>
     <div class="container">
+
+        <div class="alert alert-dismissible alert-warning d-none" id="responsePrivate">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <h5 class="alert-heading">Message privé :</h5>
+            <div class="modal-body" id="responsePrivateInner"></div>
+          </div>
+
         <div id="private" class="hide">
             <textarea id="myprivate"></textarea>
             <br>
             <button type="button" class="btn btn-warning" id="sendPrivate">Envoyer en privé</button>
         </div>
-        <div class="card border-warning mb-3" style="max-width: 20rem;" id="responsePrivate" class="hide"></div>
-        <div class="alert alert-dismissible alert-primary" id="clients"></div>
+
+        <div class="alert alert-dismissible alert-primary">
+            <h4 class="alert-heading">En ligne :</h4>
+            <h5 class="alert-heading">(Cliquez sur le contact pour envoyer un message privé)</h5>
+            <p id="clients"></p>
+        </div>
+
         <textarea id="mytextarea"></textarea>
         <br>
         <button type="button" class="btn btn-primary" id="sendMessage">Envoyer</button>
         <br>
+
         <div class="card border-warning mb-3" style="max-width: 20rem;" id="conversation"></div>
     </div>
 </body>
