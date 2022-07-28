@@ -17,8 +17,8 @@ const pseudo = urlParams.get('pseudo');
 function displayClients(monSocketClients) {
     let clientsTmp = "";
     monSocketClients.forEach(element => {
-        if(monId !== element.id){
-        clientsTmp += `<div onclick="privateMessage('${element.id}');">${element.pseudo}</div>`;
+        if (monId !== element.id) {
+            clientsTmp += `<div onclick="privateMessage('${element.id}');">${element.pseudo}</div>`;
         }
     });
     clients.innerHTML = clientsTmp;
@@ -39,7 +39,7 @@ function privateMessage(idContact) {
             'alignleft aligncenter alignright alignjustify | ' +
             'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
     });
-    sendPrivate.addEventListener("click", () => {
+    function fuckinFunction() {
         let monMessage = tinyMCE.get('myprivate').getContent();
         let date = new Date();
         // idContact, monId, pseudo
@@ -53,11 +53,15 @@ function privateMessage(idContact) {
         private.classList.add('d-none');
         // vider le textarea
         tinyMCE.get('myprivate').setContent('');
-    })
+        // je retire l'event click de mon bouton
+        sendPrivate.removeEventListener("click", fuckinFunction);
+    }
+    sendPrivate.addEventListener("click", fuckinFunction)
     closePrivate.addEventListener("click", () => {
         private.classList.add('d-none');
         tinyMCE.get('myprivate').setContent('');
     })
+    
 }
 
 function displayMessage(mesMessages) {
