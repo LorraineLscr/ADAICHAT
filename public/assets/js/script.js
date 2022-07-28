@@ -8,6 +8,7 @@ const conversation = document.getElementById("conversation");
 const private = document.getElementById("private"); // modale
 const sendPrivate = document.getElementById("sendPrivate"); // bouton envoi private
 const responsePrivate = document.getElementById("responsePrivate");
+const closePrivate = document.getElementById("closePrivate");
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const pseudo = urlParams.get('pseudo');
@@ -16,16 +17,17 @@ const pseudo = urlParams.get('pseudo');
 function displayClients(monSocketClients) {
     let clientsTmp = "";
     monSocketClients.forEach(element => {
+        if(monId !== element.id){
         clientsTmp += `<div onclick="privateMessage('${element.id}');">${element.pseudo}</div>`;
+        }
     });
     clients.innerHTML = clientsTmp;
 }
 
 function privateMessage(idContact) {
     // j'ouvre une modale qui contient un textarea tinymce et un bouton "Envoi privé"
-    private.classList.toggle('hide');
-    private.classList.toggle('show');
-    console.log(idContact)
+    private.classList.remove('d-none');
+    // console.log(idContact)
     tinymce.init({
         selector: '#myprivate',
         plugins: [
@@ -48,8 +50,12 @@ function privateMessage(idContact) {
             id: monId,
             pseudo: pseudo
         })
-        private.classList.toggle('d-none');
+        private.classList.add('d-none');
         // vider le textarea
+        tinyMCE.get('myprivate').setContent('');
+    })
+    closePrivate.addEventListener("click", () => {
+        private.classList.add('d-none');
         tinyMCE.get('myprivate').setContent('');
     })
 }
@@ -140,7 +146,7 @@ socket.on('newPrivateMessageResponse', (newPrivateMessageResponse) => {
         responseCard.innerHTML = pseudo + "<br>" + message + "<br>" + date;
         responsePrivate.append(responseCard);
     }
-    responsePrivate.classList.toggle('d-none');
+    responsePrivate.classList.remove('d-none');
 })
 
 socket.on('clientDisconnect', (clientDisconnect) => {
